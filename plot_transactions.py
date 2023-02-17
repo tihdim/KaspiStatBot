@@ -1,12 +1,9 @@
-import tkinter as tk
-from datetime import timedelta
-from tkinter import ttk
-
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import os
+from datetime import timedelta
 
 
-def plot_transactions(transactions: list, save_path: str = None):
+def plot_transactions(transactions: list, photo_save_path: str = None, file_save_path: str = None):
     """
     Plot the accumulated amounts of transactions over time.
 
@@ -31,8 +28,6 @@ def plot_transactions(transactions: list, save_path: str = None):
         chart_data.append((current_date, total_balance))
         current_date += timedelta(days=1)
 
-    print('Total balance:', int(total_balance), '₸')
-
     # Create a sequence of dates that includes all dates between the start and end date of the transactions
     all_dates = [start_date + timedelta(days=x) for x in range((end_date - start_date).days + 1)]
 
@@ -55,35 +50,15 @@ def plot_transactions(transactions: list, save_path: str = None):
     ax.set_ylabel('Accumulated Amount')
     ax.grid(True)
 
-    # Create a tkinter window and add the graph to it
-    root = tk.Tk()
-    root.title('Transaction History')
-    root.geometry('1024x768')
-
-    # Create a style for the ttk widgets
-    style = ttk.Style()
-    style.theme_use('clam')
-    style.configure('TFrame', background='white')
-    style.configure('TLabel', background='white')
-    style.configure('TButton', background='#4CAF50', foreground='white')
-
-    # Create a frame to hold the graph
-    graph_frame = ttk.Frame(root, padding=10)
-    graph_frame.pack(fill='both', expand=True)
-
-    # Create a canvas to hold the graph
-    canvas = FigureCanvasTkAgg(fig, master=graph_frame)
-    canvas.draw()
-    canvas.get_tk_widget().pack(fill='both', expand=True)
-
-    # # Add a button to close the window
-    # close_button = ttk.Button(root, text='Close', command=root.destroy)
-    # close_button.pack(side='bottom', pady=10)
-    # # Start the tkinter main loop
-    # root.mainloop()
-
-    # Optionally save the plot as a PNG file
-    if save_path:
+    # Save the plot as a PNG file
+    if photo_save_path:
         fig.tight_layout()
         fig.set_size_inches([8, 6])
-        fig.savefig(save_path, dpi=600, bbox_inches='tight')
+        fig.savefig(photo_save_path, dpi=700, bbox_inches='tight')
+        # if file will be more than allowed by telegram API
+        if os.path.getsize(photo_save_path) > 512*1024:
+            fig.savefig(photo_save_path, dpi=350, bbox_inches='tight')
+    if file_save_path:
+        fig.tight_layout()
+        fig.set_size_inches([8, 6])
+        fig.savefig(file_save_path, dpi=1400, bbox_inches='tight')

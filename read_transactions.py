@@ -26,7 +26,6 @@ def read_transactions(filename: str) -> list:
                     amount = float(amount_str)
                 if ' - ' in line:
                     amount = float(amount_str) * -1
-                # print(date_str, ' ', amount)
             except (ValueError, TypeError):
                 continue
             transactions.append((date, amount))

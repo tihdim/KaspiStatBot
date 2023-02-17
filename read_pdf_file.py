@@ -3,7 +3,8 @@ import os
 
 import PyPDF2
 
-def read_pdf_file(filename: str) -> str:
+
+def read_pdf_file(filename: str):
     """
     Read the text content of a PDF file.
 
@@ -27,6 +28,6 @@ def read_pdf_file(filename: str) -> str:
                 if re.match(r'^\d{2}\.\d{2}\.\d{2}', line):
                     text += line
                     text += '\n'
-        with open(current_dir + '/data/data', 'w', encoding="utf-8") as file:
-            file.write(text)
+        with open(current_dir + '/data/data', 'w', encoding="utf-8") as data:
+            data.write(text)
     return 0
